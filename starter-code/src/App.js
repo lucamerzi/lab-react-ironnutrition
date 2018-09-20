@@ -5,12 +5,21 @@ import foods from './foods.json'
 
 
 class App extends Component {
-
 	constructor(props) {
 		super(props)
 		this.state = {
-			foods: foods
+			foods: foods,
+			search: "",
+			todaysFoods: []
 		}
+		this.handleClick = this.handleClick.bind(this);
+	}
+
+	handleClick = (food, qty) =>{
+		let todaysFoods = this.state.todaysFoods
+		todaysFoods.push({...food, qty})
+		this.setState({todaysFoods})
+		console.log(this.state.todaysFoods)
 	}
 
 	searchFood(event) {
@@ -46,7 +55,8 @@ class App extends Component {
 					<div class="column">
 						{
 							foods.map((el, index) => {
-								return <FoodBox key={index} oneFood={el} />
+								return <FoodBox key={index} oneFood={el} 
+								onClick={this.handleClick} />
 							})
 						}
 					</div>
@@ -55,12 +65,14 @@ class App extends Component {
 
 						<h1>Today's foods</h1>
 						<ul>
-							<li>hi</li>
+							 {this.state.todaysFoods.map( el => {
+								return <li> {el.qty} {el.name} = {parseInt(el.qty) * el.calories } calories </li>
+							} )} 
+						<li>Total  </li>
 						</ul>
+
 					</div>
 				</div>
-
-
 			</div>
 		);
 	}
